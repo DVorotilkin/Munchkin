@@ -81,7 +81,7 @@ namespace MunchkinLib
             return _classes;
         }
 
-        public void replaceCkass(Class oldClass, Class newClass)
+        public void replaceClass(Class oldClass, Class newClass)
         {
             int i;
             if ((i = _classes.IndexOf(oldClass)) != -1)
