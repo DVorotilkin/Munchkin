@@ -8,5 +8,6 @@ namespace MunchkinLib
 {
     public class Player
     {
+        int kek;
     }
 }
