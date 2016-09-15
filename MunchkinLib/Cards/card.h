@@ -2,9 +2,11 @@
 #define CARD_H
 
 #include "munchkinlib_global.h"
+#include <QObject>
 
-class MUNCHKINLIBSHARED_EXPORT Card
+class MUNCHKINLIBSHARED_EXPORT Card : QObject
 {
+    Q_OBJECT
 
 public:
     Card();
