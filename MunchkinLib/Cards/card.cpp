@@ -1,13 +1,5 @@
 #include "card.h"
 
-
-Card::Card()
-{
-    _id = 0;
-    _name = "";
-    _type = false;
-}
-
 Card::Card(uint id, QString name, bool type)
 {
     _id = id;
@@ -28,4 +20,9 @@ uint Card::id() const
 bool Card::type() const
 {
     return _type;
+}
+
+QString Card::description() const
+{
+    return _description;
 }
