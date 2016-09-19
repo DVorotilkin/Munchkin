@@ -15,12 +15,16 @@ DEFINES += MUNCHKINLIB_LIBRARY
 
 SOURCES += Cards\card.cpp \
     Cards/action.cpp \
-    Cards/monster.cpp
+    Cards/monster.cpp \
+    Cards/class.cpp \
+    Cards/race.cpp
 
 HEADERS += Cards\card.h\
         munchkinlib_global.h \
     Cards/action.h \
-    Cards/monster.h
+    Cards/monster.h \
+    Cards/class.h \
+    Cards/race.h
 
 unix {
     target.path = /usr/lib

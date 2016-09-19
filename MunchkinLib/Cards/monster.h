@@ -1,10 +1,11 @@
 #ifndef MONSER_H
 #define MONSER_H
 
+#include "munchkinlib_global.h"
 #include "card.h"
 #include "action.h"
 
-class Monser : public Card
+class MUNCHKINLIBSHARED_EXPORT Monser : public Card
 {
 public:
     Monser(uint id, QString name, bool type, quint8 lvl, quint8 damage, QByteArray ability, QByteArray badStash);
