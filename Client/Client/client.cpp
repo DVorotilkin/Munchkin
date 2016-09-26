@@ -15,5 +15,10 @@ Client::~Client()
 
 void Client::on_Exit_clicked()
 {
-    exit(0);
+    close();
+}
+
+void Client::on_Send_clicked()
+{
+
 }
