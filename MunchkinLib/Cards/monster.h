@@ -1,14 +1,14 @@
-#ifndef MONSER_H
-#define MONSER_H
+#ifndef MONSTER_H
+#define MONSTER_H
 
 #include "munchkinlib_global.h"
 #include "card.h"
 #include "action.h"
 
-class MUNCHKINLIBSHARED_EXPORT Monser : public Card
+class MUNCHKINLIBSHARED_EXPORT Monster : public Card
 {
 public:
-    Monser(uint id, QString name, bool type, quint8 lvl, quint8 damage, QByteArray ability, QByteArray badStash);
+    Monster(uint id, QString name, bool type, quint8 lvl, quint8 damage, QByteArray ability, QByteArray badStash);
     quint8 _damage;
     quint8 lvl() const;
     void doAbility();
@@ -20,4 +20,4 @@ private:
     QByteArray _badStash;
 };
 
-#endif // MONSER_H
+#endif // MONSTER_H

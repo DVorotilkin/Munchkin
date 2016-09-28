@@ -7,7 +7,7 @@
 
 enum Races
 {
-        AnyRace, //любая расса (для шмота)
+        NoRace, //любая расса (для шмота)
         Man,
         Elf,
         Dwarf,

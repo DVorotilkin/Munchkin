@@ -4,7 +4,7 @@
 #include "munchkinlib_global.h"
 #include <QObject>
 
-class MUNCHKINLIBSHARED_EXPORT Card : QObject
+class MUNCHKINLIBSHARED_EXPORT Card : public QObject
 {
     Q_OBJECT
 
