@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        client.cpp
+        client.cpp \
+    network.cpp
 
-HEADERS  += client.h
+HEADERS  += client.h \
+    network.h
 
 FORMS    += client.ui
