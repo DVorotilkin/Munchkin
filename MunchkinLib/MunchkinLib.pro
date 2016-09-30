@@ -20,7 +20,10 @@ SOURCES += Cards\card.cpp \
     Cards/race.cpp \
     Cards/shmatte.cpp \
     Cards/onceaction.cpp \
-    Entities/player.cpp
+    Entities/player.cpp \
+    Network/network.cpp \
+    Network/servernetwork.cpp \
+    Network/clientnetwork.cpp
 
 HEADERS += Cards\card.h\
         munchkinlib_global.h \
@@ -30,7 +33,10 @@ HEADERS += Cards\card.h\
     Cards/race.h \
     Cards/shmatte.h \
     Cards/onceaction.h \
-    Entities/player.h
+    Entities/player.h \
+    Network/network.h \
+    Network/servernetwork.h \
+    Network/clientnetwork.h
 
 unix {
     target.path = /usr/lib
