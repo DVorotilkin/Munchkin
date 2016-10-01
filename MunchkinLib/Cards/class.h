@@ -20,7 +20,6 @@ class MUNCHKINLIBSHARED_EXPORT Class : public Card
 public:
     Class(uint id, QString name, bool type, Classes __class, QByteArray ability1, QByteArray ability2);
     Classes getClass() const;
-
     QByteArray ability1() const;
     void doAbility1();
     QByteArray ability2() const;

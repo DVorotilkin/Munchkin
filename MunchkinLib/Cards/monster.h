@@ -14,6 +14,10 @@ public:
     void doAbility();
     void doBadStash();
 
+    QByteArray ability() const;
+
+    QByteArray badStash() const;
+
 private:
     quint8 _lvl;
     QByteArray _ability;

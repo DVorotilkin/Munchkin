@@ -17,3 +17,13 @@ void Monster::doBadStash()
 {
      Action::doAction(_badStash);
 }
+
+QByteArray Monster::ability() const
+{
+    return _ability;
+}
+
+QByteArray Monster::badStash() const
+{
+    return _badStash;
+}

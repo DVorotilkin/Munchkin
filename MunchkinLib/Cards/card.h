@@ -14,13 +14,13 @@ public:
     uint id() const;
     bool type() const;
     QString description() const;
+    virtual toByteArray() = 0;
 
 private:
     QString _name;
     QString _description;
     uint _id;
     bool _type; //Door - false, treasure - true
-
 };
 
 #endif // CARD_H

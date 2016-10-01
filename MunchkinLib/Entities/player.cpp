@@ -21,89 +21,69 @@ bool Player::canAddCardToTable(Card *card, QList<Card*>& errCards)
         emit error(404);
         return false;
     }
-    {//шмотка
-        Shmatte *tmp = dynamic_cast<Shmatte*>(card);
-        if (tmp != NULL)
-            return isShmatteValid(tmp);
+    if (Shmatte *tmp = dynamic_cast<Shmatte*>(card))
+        return isShmatteValid(tmp);
 
-    }
-    {//класс
-        Class *tmp = dynamic_cast<Class*>(card);
-        if (tmp != NULL)
-        {
-            if (!isClassValid(tmp))
-                return false;
-            for (auto i = _table.begin(); i != _table.end(); ++i)
-            {
-                Shmatte *shm = dynamic_cast<Shmatte*>(card);
-                if (shm == NULL)
-                    continue;
-                if (shm->getClass() != _class[0] && shm->getClass() != _class[1])
-                    errCards.append((Card*)shm);
-            }
-            if (!errCards.empty())
-            {
-                emit error(5);
-                return true;
-            }
-        }
-
-    }
-    {//раса
-        Race *tmp = dynamic_cast<Race*>(card);
-        if (tmp != NULL)
-        {
-            if (!isRaceValid(tmp))
-                return false;
-            for (auto i = _table.begin(); i != _table.end(); ++i)
-            {
-                Shmatte *shm = dynamic_cast<Shmatte*>(card);
-                if (shm == NULL)
-                    continue;
-                if (shm->race() != _race[0] && shm->race() != _race[1])
-                    errCards.append((Card*)shm);
-            }
-            if (!errCards.empty())
-            {
-                emit error(5);
-                return true;
-            }
-        }
-
-    }
+    if (Class *tmp = dynamic_cast<Class*>(card))
     {
-        Monster *tmp = dynamic_cast<Monster*>(card);
-        if (tmp != NULL)
-        {
-            emit error(6);
+        if (!isClassValid(tmp))
             return false;
+        for (auto i = _table.begin(); i != _table.end(); ++i)
+        {
+            Shmatte *shm = dynamic_cast<Shmatte*>(card);
+            if (shm == NULL)
+                continue;
+            if (shm->getClass() != _class[0] && shm->getClass() != _class[1])
+                errCards.append((Card*)shm);
+        }
+        if (!errCards.empty())
+        {
+            emit error(5);
+            return true;
         }
     }
+
+    if (Race *tmp = dynamic_cast<Race*>(card))
     {
-        OnceAction *tmp = dynamic_cast<OnceAction*>(card);
-        if (tmp != NULL)
-        {
-            emit error(7);
+        if (!isRaceValid(tmp))
             return false;
+        for (auto i = _table.begin(); i != _table.end(); ++i)
+        {
+            Shmatte *shm = dynamic_cast<Shmatte*>(card);
+            if (shm == NULL)
+                continue;
+            if (shm->race() != _race[0] && shm->race() != _race[1])
+                errCards.append((Card*)shm);
         }
+        if (!errCards.empty())
+        {
+            emit error(5);
+            return true;
+        }
+    }
+
+    if (Monster *tmp = dynamic_cast<Monster*>(card))
+    {
+        emit error(6);
+        return false;
+    }
+    if (OnceAction *tmp = dynamic_cast<OnceAction*>(card))
+    {
+        emit error(7);
+        return false;
     }
     return true;
 }
 
 void Player::addCardToTable(Card *card)
 {
-    {//шмотка
-        Shmatte *tmp = dynamic_cast<Shmatte*>(card);
-        if (tmp != NULL)
+    if (Shmatte *tmp = dynamic_cast<Shmatte*>(card))
         {
             _hand.removeOne(card);
             _table.append(card);
             _damage += tmp->bonus();
         }
-    }
-    {//класс
-        Class *tmp = dynamic_cast<Class*>(card);
-        if (tmp != NULL)
+    if (Class *tmp = dynamic_cast<Class*>(card))
         {
             if (_class[0] == Classes::NoClass)
                 _class[0] = tmp->getClass();
@@ -121,10 +101,7 @@ void Player::addCardToTable(Card *card)
                 }
             }
         }
-    }
-    {//раса
-        Race *tmp = dynamic_cast<Race*>(card);
-        if (tmp != NULL)
+    if (Race *tmp = dynamic_cast<Race*>(card))
         {
             if (_race[0] == Races::NoRace)
                 _race[0] = tmp->race();
@@ -142,7 +119,6 @@ void Player::addCardToTable(Card *card)
                 }
             }
         }
-    }
 }
 
 void Player::addCardToHand(Card *card)
@@ -240,4 +216,71 @@ bool Player::isRaceValid(Race *race)
         return false;
     }
     return true;
+}
+
+QByteArray Player::getHash()
+{
+    return QCryptographicHash::hash(toByteArray(), QCryptographicHash::Md5);
+}
+
+QByteArray Player::cardToByteArray(Card *card)
+{
+    QByteArray result;
+    result.append(card->id());
+    result.append(card->description());
+    result.append(card->type());
+    if (Shmatte *tmp = dynamic_cast<Shmatte*>(card))
+    {
+        result.append(tmp->bonus());
+        result.append(tmp->gender());
+        result.append(tmp->race());
+        result.append(tmp->getClass());
+        result.append(tmp->incompatibleClass());
+        result.append(tmp->limb());
+        result.append(tmp->ability());
+    }
+    if (Monster *tmp  = dynamic_cast<Monster*>(card))
+    {
+        result.append(tmp->lvl());
+        result.append(tmp->_damage);
+        result.append(tmp->ability());
+        result.append(tmp->badStash());
+    }
+    if (Class *tmp  = dynamic_cast<Class*>(card))
+    {
+        result.append(tmp->getClass());
+        result.append(tmp->ability1());
+        result.append(tmp->ability2());
+    }
+    if (Race *tmp  = dynamic_cast<Race*>(card))
+    {
+        result.append(tmp->race());
+        result.append(tmp->ability());
+    }
+    if (Race *tmp  = dynamic_cast<Race*>(card))
+    {
+
+    }
+}
+
+QByteArray Player::toByteArray()
+{
+    QByteArray input;
+    input.append(_lvl);
+    input.append(_damage);
+    input.append(_runAwayChance);
+    input.append(_luck);
+    input.append(_raceCocktail);
+    input.append(_superMunchkin);
+    input.append(_gender);
+    input.append(_race[0]);
+    input.append(_race[1]);
+    input.append(_class[0]);
+    input.append(_class[1]);
+    for (int i = 0; i < 5; ++i)
+        input.append(_body[i]);
+    for (auto i = _hand.begin(); i != _hand.end(); ++i)
+    {
+        input.append(cardToByteArray(*i));
+    }
 }
