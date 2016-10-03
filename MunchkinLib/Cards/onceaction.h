@@ -11,6 +11,10 @@ public:
     OnceAction(uint id, QString name, bool type, QByteArray action);
     QByteArray action() const;
     void doAction();
+    virtual QByteArray toByteArray();
+    virtual bool canAddtoTable(Player *player, QList<Card*>& errCards);
+    virtual void fromJson(QJsonObject json);
+    virtual QJsonObject toJson();
 
 private:
     QByteArray _action;

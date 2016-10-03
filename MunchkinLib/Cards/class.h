@@ -3,7 +3,10 @@
 
 #include "munchkinlib_global.h"
 #include "card.h"
+//#include "shmatte.h"
 #include "action.h"
+
+class Shmatte;
 
 enum Classes
 {
@@ -14,7 +17,6 @@ enum Classes
         Cleric
 };
 
-
 class MUNCHKINLIBSHARED_EXPORT Class : public Card
 {
 public:
@@ -24,6 +26,10 @@ public:
     void doAbility1();
     QByteArray ability2() const;
     void doAbility2();
+    virtual QByteArray toByteArray();
+    virtual bool canAddtoTable(Player *player, QList<Card*>& errCards);
+    virtual void fromJson(QJsonObject json);
+    virtual QJsonObject toJson();
 
 private:
     Classes _class;

@@ -21,6 +21,10 @@ public:
     Races race() const;
     void doAbility();
     QByteArray ability() const;
+    virtual QByteArray toByteArray();
+    virtual bool canAddtoTable(Player *player, QList<Card*> &errCards);
+    virtual void fromJson(QJsonObject json);
+    virtual QJsonObject toJson();
 
 private:
     Races _race;

@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SHMATTE_H
 #define SHMATTE_H
 
@@ -33,17 +34,21 @@ public:
     void doAbility();
     Gender gender() const;
     Body limb() const;
-
     Classes incompatibleClass() const;
+    virtual QByteArray toByteArray();
+    virtual bool canAddtoTable(Player *player, QList<Card*>& errCards);
+    virtual void fromJson(QJsonObject json);
+    virtual QJsonObject toJson();
 
 private:
-    Gender _gender;
     quint8 _bonus;
+    Gender _gender;
+    Body _limb; //конечность (куда одевается)
     Races _race;
     Classes _class;
     Classes _incompatibleClass; //несовместимый класс
     QByteArray _ability;
-    Body _limb; //конечность (куда одевается)
+
 };
 
 #endif // SHMATTE_H
