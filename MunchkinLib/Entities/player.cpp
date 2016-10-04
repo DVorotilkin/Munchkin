@@ -14,66 +14,15 @@ Player::Player():_hand(), _table(), _tap()
     _gender = Gender::Boy;
 }
 
-/*bool Player::canAddCardToTable(Card *card, QList<Card*>& errCards)
+bool Player::canAddCardToTable(Card *card, QList<Card*>& errCards)
 {
-    if (!_hand.contains(card)) //exeption бы
+    if (!_hand.contains(card))
     {
         emit error(404);
         return false;
     }
-    if (Shmatte *tmp = dynamic_cast<Shmatte*>(card))
-        return isShmatteValid(tmp);
-
-    if (Class *tmp = dynamic_cast<Class*>(card))
-    {
-        if (!isClassValid(tmp))
-            return false;
-        for (auto i = _table.begin(); i != _table.end(); ++i)
-        {
-            Shmatte *shm = dynamic_cast<Shmatte*>(card);
-            if (shm == NULL)
-                continue;
-            if (shm->getClass() != _class[0] && shm->getClass() != _class[1])
-                errCards.append((Card*)shm);
-        }
-        if (!errCards.empty())
-        {
-            emit error(5);
-            return true;
-        }
-    }
-
-    if (Race *tmp = dynamic_cast<Race*>(card))
-    {
-        if (!isRaceValid(tmp))
-            return false;
-        for (auto i = _table.begin(); i != _table.end(); ++i)
-        {
-            Shmatte *shm = dynamic_cast<Shmatte*>(card);
-            if (shm == NULL)
-                continue;
-            if (shm->race() != _race[0] && shm->race() != _race[1])
-                errCards.append((Card*)shm);
-        }
-        if (!errCards.empty())
-        {
-            emit error(5);
-            return true;
-        }
-    }
-
-    if (Monster *tmp = dynamic_cast<Monster*>(card))
-    {
-        emit error(6);
-        return false;
-    }
-    if (OnceAction *tmp = dynamic_cast<OnceAction*>(card))
-    {
-        emit error(7);
-        return false;
-    }
-    return true;
-}*/
+    return card->canAddtoTable(this, errCards);
+}
 
 void Player::addCardToTable(Card *card)
 {
@@ -127,6 +76,36 @@ void Player::addCardToHand(Card *card)
 
 }
 
+QByteArray Player::toByteArray()
+{
+    QByteArray result;
+    result.append(lvl);
+    result.append(damage);
+    result.append(runAwayChance);
+    result.append(luck);
+    result.append(raceCocktail);
+    result.append(superMunchkin);
+    result.append(_gender);
+    result.append(_race[0]);
+    result.append(_race[1]);
+    result.append(_class[0]);
+    result.append(_class[1]);
+    for (int i = 0; i < 5; ++i)
+        result.append(_body[i]);
+    for (auto i = _hand.begin(); i != _hand.end(); ++i)
+    {
+        result.append((*i)->toByteArray());
+    }
+    for (auto i = _table.begin(); i != _table.end(); ++i)
+    {
+        result.append((*i)->toByteArray());
+    }for (auto i = _tap.begin(); i != _tap.end(); ++i)
+    {
+        result.append((*i)->toByteArray());
+    }
+    return result;
+}
+
 QByteArray Player::getHash()
 {
     return QCryptographicHash::hash(toByteArray(), QCryptographicHash::Md5);
@@ -152,24 +131,8 @@ QList<Card *> Player::table()
     return _table;
 }
 
-QByteArray Player::toByteArray()
+qint8 Player::bigShmattes() const
 {
-    QByteArray input;
-    input.append(lvl);
-    input.append(damage);
-    input.append(runAwayChance);
-    input.append(luck);
-    input.append(raceCocktail);
-    input.append(superMunchkin);
-    input.append(_gender);
-    input.append(_race[0]);
-    input.append(_race[1]);
-    input.append(_class[0]);
-    input.append(_class[1]);
-    for (int i = 0; i < 5; ++i)
-        input.append(_body[i]);
-    for (auto i = _hand.begin(); i != _hand.end(); ++i)
-    {
-        //input.append(cardToByteArray(*i));
-    }
+    return _bigShmattes;
 }
+

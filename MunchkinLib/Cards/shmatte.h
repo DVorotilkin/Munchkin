@@ -26,7 +26,7 @@ enum Gender
 class MUNCHKINLIBSHARED_EXPORT Shmatte : public Card
 {
 public:
-    Shmatte(uint id, QString name, bool type, quint8 bonus, Gender gender, Body limb, Races race, Classes __class, Classes incompatibleClass, QByteArray ability);
+    Shmatte(uint id, QString name, bool type, quint8 bonus, Gender gender, Body limb, Races race, Classes __class, bool big, Classes incompatibleClass, QByteArray ability);
     quint8 bonus() const;
     Races race() const;
     Classes getClass() const;
@@ -46,6 +46,7 @@ private:
     Body _limb; //конечность (куда одевается)
     Races _race;
     Classes _class;
+    bool _big;
     Classes _incompatibleClass; //несовместимый класс
     QByteArray _ability;
 

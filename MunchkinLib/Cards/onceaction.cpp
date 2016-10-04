@@ -25,16 +25,26 @@ QByteArray OnceAction::toByteArray()
 
 bool OnceAction::canAddtoTable(Player *player, QList<Card *> &errCards)
 {
+    Q_UNUSED(errCards);
+    Q_UNUSED(player);
     emit error(7);
     return false;
 }
 
 void OnceAction::fromJson(QJsonObject json)
 {
-
+    if (!json.contains("action"))
+    {
+        emit error(8);
+        return;
+    }
+    Card::fromJson(json);
+    _action = json["action"].toString().toUtf8(); //мб бага бага
 }
 
 QJsonObject OnceAction::toJson()
 {
-
+    QJsonObject result = Card::toJson();
+    result["action"] = QString::fromUtf8(_action);
+    return result;
 }

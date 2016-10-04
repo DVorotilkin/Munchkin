@@ -22,8 +22,8 @@ public:
     QString description() const;
     virtual QByteArray toByteArray() = 0;
     virtual bool canAddtoTable(Player *player, QList<Card*>& errCards) = 0;
-    virtual void fromJson(QJsonObject json) = 0;
-    virtual QJsonObject toJson() = 0;
+    virtual void fromJson(QJsonObject json);
+    virtual QJsonObject toJson();
 
 protected:
     QString _name;

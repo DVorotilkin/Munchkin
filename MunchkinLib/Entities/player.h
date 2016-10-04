@@ -30,6 +30,8 @@ public:
     QList<Card *> table();
 
 
+    qint8 bigShmattes() const;
+
 private:
     QList<Card*> _hand;
     QList<Card*> _table;
@@ -37,6 +39,7 @@ private:
     Races _race[2];
     Classes _class[2];
     bool _body[5]; //по одному элементу на каждый элемент одежды
+    qint8 _bigShmattes;
     QByteArray cardToByteArray(Card *card);
     QByteArray toByteArray();
 

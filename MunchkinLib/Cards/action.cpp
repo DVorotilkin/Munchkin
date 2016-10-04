@@ -7,7 +7,7 @@ Action::Action()
 
 bool Action::doAction(QByteArray action)
 {
-    QJsonParseError *err;
+    QJsonParseError *err = NULL;
     QJsonDocument jsonAction = QJsonDocument::fromJson(action, err);
     if (err->error != QJsonParseError::NoError)
     {

@@ -2,7 +2,7 @@
 #include "Entities/player.h"
 
 Shmatte::Shmatte(uint id, QString name, bool type, quint8 bonus, Gender gender, Body limb, Races race, Classes __class, Classes incompatibleClass, QByteArray ability):
-    Card(id, name, type), _bonus(bonus), _gender(gender), _limb(limb), _race(race), _class(__class), _incompatibleClass(incompatibleClass), _ability(ability){}
+    Card(id, name, type), _bonus(bonus), _gender(gender), _limb(limb), _race(race), _class(__class), _big(big), _incompatibleClass(incompatibleClass), _ability(ability){}
 
 quint8 Shmatte::bonus() const
 {
@@ -49,6 +49,7 @@ QByteArray Shmatte::toByteArray()
     result.append(_gender);
     result.append(_race);
     result.append(_class);
+    result.append(_big);
     result.append(_incompatibleClass);
     result.append(_limb);
     result.append(_ability);
@@ -110,6 +111,11 @@ bool Shmatte::canAddtoTable(Player *player, QList<Card*>& errCards)
     if (player->body()[_limb] == true)
     {
         emit error(4);
+        return false;
+    }
+    if ((player->getClass()[0] != Classes::Dwarf && player->getClass()[1] != Classes::Dwarf) && _big && player->bigShmattes() > 0)
+    {
+        emit error(9);
         return false;
     }
     return true;

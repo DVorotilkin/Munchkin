@@ -43,13 +43,27 @@ QByteArray Monster::toByteArray()
 
 bool Monster::canAddtoTable(Player *player, QList<Card *> &errCards)
 {
+    Q_UNUSED(errCards);
+    Q_UNUSED(player);
     emit error(6);
     return false;
 }
 
 void Monster::fromJson(QJsonObject json)
 {
-
+    if (!json.contains("lvl") ||
+        !json.contains("damage") ||
+        !json.contains("ability") ||
+        !json.contains("badStash"))
+    {
+        emit error(8);
+        return;
+    }
+    Card::fromJson(json);
+    _lvl = json["lvl"].toInt();
+    _damage = json["damage"].toInt();
+    _ability = json["ability"].toString().toUtf8();
+    _badStash = json["badStash"].toString().toUtf8();
 }
 
 QJsonObject Monster::toJson()
