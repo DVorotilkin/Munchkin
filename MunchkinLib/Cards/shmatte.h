@@ -26,18 +26,18 @@ enum Gender
 class MUNCHKINLIBSHARED_EXPORT Shmatte : public Card
 {
 public:
-    Shmatte(uint id, QString name, bool type, quint8 bonus, Gender gender, Body limb, Races race, Classes __class, bool big, Classes incompatibleClass, QByteArray ability);
+    Shmatte(uint id, QString name, bool type, quint8 bonus, Gender gender, Body limb, Races race, Classes __class, bool big, Classes incompatibleClass, QJsonObject ability);
     quint8 bonus() const;
     Races race() const;
     Classes getClass() const;
-    const QByteArray ability() const;
+    const QJsonObject ability() const;
     void doAbility();
     Gender gender() const;
     Body limb() const;
     Classes incompatibleClass() const;
     virtual QByteArray toByteArray();
     virtual bool canAddtoTable(Player *player, QList<Card*>& errCards);
-    virtual void fromJson(QJsonObject json);
+    virtual bool fromJson(QJsonObject json);
     virtual QJsonObject toJson();
 
 private:
@@ -48,7 +48,7 @@ private:
     Classes _class;
     bool _big;
     Classes _incompatibleClass; //несовместимый класс
-    QByteArray _ability;
+    QJsonObject _ability;
 
 };
 

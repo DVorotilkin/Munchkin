@@ -1,7 +1,7 @@
 #include "shmatte.h"
 #include "Entities/player.h"
 
-Shmatte::Shmatte(uint id, QString name, bool type, quint8 bonus, Gender gender, Body limb, Races race, Classes __class, Classes incompatibleClass, QByteArray ability):
+Shmatte::Shmatte(uint id, QString name, bool type, quint8 bonus, Gender gender, Body limb, Races race, Classes __class, bool big, Classes incompatibleClass, QJsonObject ability):
     Card(id, name, type), _bonus(bonus), _gender(gender), _limb(limb), _race(race), _class(__class), _big(big), _incompatibleClass(incompatibleClass), _ability(ability){}
 
 quint8 Shmatte::bonus() const
@@ -14,7 +14,7 @@ Races Shmatte::race() const
     return _race;
 }
 
-const QByteArray Shmatte::ability() const
+const QJsonObject Shmatte::ability() const
 {
     return _ability;
 }
@@ -52,7 +52,7 @@ QByteArray Shmatte::toByteArray()
     result.append(_big);
     result.append(_incompatibleClass);
     result.append(_limb);
-    result.append(_ability);
+    result.append(QJsonDocument(_ability).toBinaryData());
     return result;
 }
 
@@ -113,7 +113,7 @@ bool Shmatte::canAddtoTable(Player *player, QList<Card*>& errCards)
         emit error(4);
         return false;
     }
-    if ((player->getClass()[0] != Classes::Dwarf && player->getClass()[1] != Classes::Dwarf) && _big && player->bigShmattes() > 0)
+    if ((player->getClass()[0] != Races::Dwarf && player->getClass()[1] != Races::Dwarf) && _big && player->bigShmattes() > 0)
     {
         emit error(9);
         return false;
@@ -121,7 +121,7 @@ bool Shmatte::canAddtoTable(Player *player, QList<Card*>& errCards)
     return true;
 }
 
-void Shmatte::fromJson(QJsonObject json)
+bool Shmatte::fromJson(QJsonObject json)
 {
 
 }

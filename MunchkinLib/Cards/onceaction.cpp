@@ -1,9 +1,9 @@
 #include "onceaction.h"
 
-OnceAction::OnceAction(uint id, QString name, bool type, QByteArray action):
+OnceAction::OnceAction(uint id, QString name, bool type, QJsonObject action):
     Card(id, name, type), _action(action){}
 
-QByteArray OnceAction::action() const
+QJsonObject OnceAction::action() const
 {
     return _action;
 }
@@ -19,7 +19,7 @@ QByteArray OnceAction::toByteArray()
     result.append(_id);
     result.append(_description);
     result.append(_type);
-    result.append(_action);
+    result.append(QJsonDocument(_action).toBinaryData());
     return result;
 }
 
@@ -31,20 +31,22 @@ bool OnceAction::canAddtoTable(Player *player, QList<Card *> &errCards)
     return false;
 }
 
-void OnceAction::fromJson(QJsonObject json)
+bool OnceAction::fromJson(QJsonObject json)
 {
     if (!json.contains("action"))
     {
         emit error(8);
-        return;
+        return false;
     }
-    Card::fromJson(json);
-    _action = json["action"].toString().toUtf8(); //мб бага бага
+    if (!Card::fromJson(json))
+        return false;
+    _action = json["action"].toObject();
+    return true;
 }
 
 QJsonObject OnceAction::toJson()
 {
     QJsonObject result = Card::toJson();
-    result["action"] = QString::fromUtf8(_action);
+    result["action"] = _action;
     return result;
 }

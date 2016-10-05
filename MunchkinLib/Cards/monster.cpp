@@ -1,6 +1,6 @@
 #include "monster.h"
 
-Monster::Monster(uint id, QString name, bool type, quint8 lvl, quint8 damage, QByteArray ability, QByteArray badStash):
+Monster::Monster(uint id, QString name, bool type, quint8 lvl, quint8 damage, QJsonObject ability, QJsonObject badStash):
     Card(id, name, type), _damage(damage), _lvl(lvl), _ability(ability), _badStash(badStash){}
 
 quint8 Monster::lvl() const
@@ -18,12 +18,12 @@ void Monster::doBadStash()
      Action::doAction(_badStash);
 }
 
-QByteArray Monster::ability() const
+QJsonObject Monster::ability() const
 {
     return _ability;
 }
 
-QByteArray Monster::badStash() const
+QJsonObject Monster::badStash() const
 {
     return _badStash;
 }
@@ -36,8 +36,8 @@ QByteArray Monster::toByteArray()
     result.append(_type);
     result.append(_lvl);
     result.append(_damage);
-    result.append(_ability);
-    result.append(_badStash);
+    result.append(QJsonDocument(_ability).toBinaryData());
+    result.append(QJsonDocument(_badStash).toBinaryData());
     return result;
 }
 
@@ -49,7 +49,7 @@ bool Monster::canAddtoTable(Player *player, QList<Card *> &errCards)
     return false;
 }
 
-void Monster::fromJson(QJsonObject json)
+bool Monster::fromJson(QJsonObject json)
 {
     if (!json.contains("lvl") ||
         !json.contains("damage") ||
@@ -57,13 +57,15 @@ void Monster::fromJson(QJsonObject json)
         !json.contains("badStash"))
     {
         emit error(8);
-        return;
+        return false;
     }
-    Card::fromJson(json);
+    if (!Card::fromJson(json))
+        return false;
     _lvl = json["lvl"].toInt();
     _damage = json["damage"].toInt();
-    _ability = json["ability"].toString().toUtf8();
-    _badStash = json["badStash"].toString().toUtf8();
+    _ability = json["ability"].toObject();
+    _badStash = json["badStash"].toObject();
+    return true;
 }
 
 QJsonObject Monster::toJson()

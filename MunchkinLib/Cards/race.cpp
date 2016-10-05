@@ -1,7 +1,7 @@
 #include "race.h"
 #include "Entities/player.h"
 
-Race::Race(uint id, QString name, bool type, Races race, QByteArray ability):
+Race::Race(uint id, QString name, bool type, Races race, QJsonObject ability):
     Card(id, name, type), _race(race), _ability(ability){}
 
 Races Race::race() const
@@ -14,7 +14,7 @@ void Race::doAbility()
     Action::doAction(_ability);
 }
 
-QByteArray Race::ability() const
+QJsonObject Race::ability() const
 {
     return _ability;
 }
@@ -26,7 +26,7 @@ QByteArray Race::toByteArray()
     result.append(_description);
     result.append(_type);
     result.append(_race);
-    result.append(_ability);
+    result.append(QJsonDocument(_ability).toBinaryData());
     return result;
 }
 
@@ -58,7 +58,7 @@ bool Race::canAddtoTable(Player *player, QList<Card *> &errCards)
     return true;
 }
 
-void Race::fromJson(QJsonObject json)
+bool Race::fromJson(QJsonObject json)
 {
 
 }

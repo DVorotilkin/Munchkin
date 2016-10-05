@@ -3,7 +3,6 @@
 #define CARD_H
 
 #include "munchkinlib_global.h"
-//#include <Entities/player.h>
 #include <QObject>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -22,7 +21,7 @@ public:
     QString description() const;
     virtual QByteArray toByteArray() = 0;
     virtual bool canAddtoTable(Player *player, QList<Card*>& errCards) = 0;
-    virtual void fromJson(QJsonObject json);
+    virtual bool fromJson(QJsonObject json);
     virtual QJsonObject toJson();
 
 protected:

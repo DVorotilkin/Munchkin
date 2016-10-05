@@ -2,7 +2,7 @@
 #include "shmatte.h"
 #include "Entities/player.h"
 
-Class::Class(uint id, QString name, bool type, Classes __class, QByteArray ability1, QByteArray ability2):
+Class::Class(uint id, QString name, bool type, Classes __class, QJsonObject ability1, QJsonObject ability2):
     Card(id, name, type), _class(__class), _ability1(ability1), _ability2(ability2){}
 
 Classes Class::getClass() const
@@ -27,8 +27,8 @@ QByteArray Class::toByteArray()
     result.append(_description);
     result.append(_type);
     result.append(_class);
-    result.append(_ability1);
-    result.append(_ability2);
+    result.append(QJsonDocument(_ability1).toBinaryData());
+    result.append(QJsonDocument(_ability2).toBinaryData());
     return result;
 }
 
@@ -60,9 +60,21 @@ bool Class::canAddtoTable(Player *player, QList<Card*>& errCards)
     return true;
 }
 
-void Class::fromJson(QJsonObject json)
+bool Class::fromJson(QJsonObject json)
 {
-
+    if (!json.contains("class") ||
+        !json.contains("ability1") ||
+        !json.contains("ability2"))
+    {
+        emit error(8);
+        return false;
+    }
+    if (!Card::fromJson(json))
+        return false;
+    _class = (Classes)json["class"].toInt();
+    _ability1 = json["ability1"].toObject();
+    _ability2 = json["ability2"].toObject();
+    return true;
 }
 
 QJsonObject Class::toJson()
@@ -70,12 +82,12 @@ QJsonObject Class::toJson()
 
 }
 
-QByteArray Class::ability2() const
+QJsonObject Class::ability2() const
 {
     return _ability2;
 }
 
-QByteArray Class::ability1() const
+QJsonObject Class::ability1() const
 {
     return _ability1;
 }

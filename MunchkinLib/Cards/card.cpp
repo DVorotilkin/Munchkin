@@ -27,16 +27,17 @@ QString Card::description() const
     return _description;
 }
 
-void Card::fromJson(QJsonObject json)
+bool Card::fromJson(QJsonObject json)
 {
     if (!json.contains("id") || !json.contains("description") ||!json.contains("type"))
     {
         emit error(8);
-        return;
+        return false;
     }
     _id = json["id"].toInt();
     _description = json["description"].toString();
     _type = json["type"].toBool();
+    return true;
 }
 
 QJsonObject Card::toJson()
