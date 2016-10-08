@@ -11,7 +11,7 @@ Player::Player():_hand(), _table(), _tap()
     _class[0] = Classes::NoClass;
     _class[1] = Classes::NoClass;
     raceCocktail = superMunchkin = false;
-    _gender = Gender::Boy;
+    gender = Gender::Boy;
 }
 
 bool Player::canAddCardToTable(Card *card, QList<Card*>& errCards)
@@ -85,7 +85,7 @@ QByteArray Player::toByteArray()
     result.append(luck);
     result.append(raceCocktail);
     result.append(superMunchkin);
-    result.append(_gender);
+    result.append(gender);
     result.append(_race[0]);
     result.append(_race[1]);
     result.append(_class[0]);
@@ -93,22 +93,53 @@ QByteArray Player::toByteArray()
     for (int i = 0; i < 5; ++i)
         result.append(_body[i]);
     for (auto i = _hand.begin(); i != _hand.end(); ++i)
-    {
         result.append((*i)->toByteArray());
-    }
     for (auto i = _table.begin(); i != _table.end(); ++i)
-    {
         result.append((*i)->toByteArray());
-    }for (auto i = _tap.begin(); i != _tap.end(); ++i)
-    {
+    for (auto i = _tap.begin(); i != _tap.end(); ++i)
         result.append((*i)->toByteArray());
-    }
     return result;
 }
 
 QByteArray Player::getHash()
 {
     return QCryptographicHash::hash(toByteArray(), QCryptographicHash::Md5);
+}
+
+QJsonObject Player::toJson()
+{
+    QJsonObject result;
+    result["lvl"] = QString::number(lvl);
+    result["damage"] = QString::number(damage);
+    result["runAwayChance"] = QString::number(runAwayChance);
+    result["luck"] = QString::number(luck);
+    result["raceCocktail"] = QString::number(raceCocktail);
+    result["superMunchkin"] = QString::number(superMunchkin);
+    result["gender"] = QString::number(gender);
+    result["bigShmattes"] = QString::number(_bigShmattes);
+    result["race0"] = QString::number(_race[0]);
+    result["race1"] = QString::number(_race[1]);
+    result["class0"] = QString::number(_class[0]);
+    result["class1"] = QString::number(_class[1]);
+    QJsonArray hand;
+    for (auto i = _hand.begin(); i != _hand.end(); ++i)
+        hand.append((*i)->toJson());
+    result["hand"] = hand;
+    QJsonArray table;
+    for (auto i = _table.begin(); i != _table.end(); ++i)
+        table.append((*i)->toJson());
+    result["table"] = table;
+    QJsonArray tap;
+    for (auto i = _tap.begin(); i != _tap.end(); ++i)
+        tap.append((*i)->toJson());
+    result["tap"] = tap;
+    QJsonArray body;
+    QString tmp = "body";
+    for (int i = 0; i < 5; ++i)
+    {
+        result[tmp+QString::number(i)] =QString::number( _body[i]);
+    }
+    return result;
 }
 
 Races *Player::race()
@@ -135,4 +166,6 @@ qint8 Player::bigShmattes() const
 {
     return _bigShmattes;
 }
+
+
 

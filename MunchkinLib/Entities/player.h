@@ -7,6 +7,7 @@
 #include "Cards/monster.h"
 #include <QList>
 #include <QCryptographicHash>
+#include <QJsonArray>
 
 class Player : public QObject
 {
@@ -19,7 +20,7 @@ public:
     qint8 luck;
     bool raceCocktail;
     bool superMunchkin;
-    Gender _gender;
+    Gender gender;
     bool canAddCardToTable(Card* card, QList<Card*>& errCards);
     void addCardToHand(Card *card);
     void addCardToTable(Card *card);
@@ -28,9 +29,9 @@ public:
     Classes *getClass();
     bool* body();
     QList<Card *> table();
-
-
     qint8 bigShmattes() const;
+    bool fromJson(QJsonObject json);
+    QJsonObject toJson();
 
 private:
     QList<Card*> _hand;

@@ -70,5 +70,10 @@ bool Monster::fromJson(QJsonObject json)
 
 QJsonObject Monster::toJson()
 {
-
+    QJsonObject result = Card::toJson();
+    result["lvl"] = QString::number(_lvl);
+    result["damage"] = QString::number(_damage);
+    result["ability"] = _ability;
+    result["badStash"] = _badStash;
+    return result;
 }

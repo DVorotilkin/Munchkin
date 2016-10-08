@@ -58,6 +58,7 @@ QByteArray Shmatte::toByteArray()
 
 bool Shmatte::canAddtoTable(Player *player, QList<Card*>& errCards)
 {
+    Q_UNUSED(errCards);
     if (_class != Classes::NoClass)
     {
         if ((player->superMunchkin) && (player->getClass()[0] != _class) && (player->getClass()[1] != _class))
@@ -93,7 +94,7 @@ bool Shmatte::canAddtoTable(Player *player, QList<Card*>& errCards)
             return false;
         }
     }
-    if (player->_gender != _gender)
+    if (player->gender != _gender)
     {
         emit error(3);
         return false;
@@ -113,7 +114,7 @@ bool Shmatte::canAddtoTable(Player *player, QList<Card*>& errCards)
         emit error(4);
         return false;
     }
-    if ((player->getClass()[0] != Races::Dwarf && player->getClass()[1] != Races::Dwarf) && _big && player->bigShmattes() > 0)
+    if ((player->race()[0] != Races::Dwarf && player->race()[1] != Races::Dwarf) && _big && player->bigShmattes() > 0)
     {
         emit error(9);
         return false;
@@ -123,12 +124,43 @@ bool Shmatte::canAddtoTable(Player *player, QList<Card*>& errCards)
 
 bool Shmatte::fromJson(QJsonObject json)
 {
-
+    if (!json.contains("bonus") ||
+        !json.contains("gender") ||
+        !json.contains("limb") ||
+        !json.contains("race") ||
+        !json.contains("class") ||
+        !json.contains("big") ||
+        !json.contains("incompatibleClass") ||
+        !json.contains("ability"))
+    {
+        emit error(8);
+        return false;
+    }
+    if (!Card::fromJson(json))
+        return false;
+    _bonus = json["bonus"].toInt();
+    _gender = (Gender)json["gender"].toInt();
+    _limb = (Body)json["limb"].toInt();
+    _race = (Races)json["race"].toInt();
+    _class = (Classes)json["class"].toInt();
+    _big = (Races)json["big"].toBool();
+    _incompatibleClass = (Classes)json["incompatibleClass"].toInt();
+    _ability = json["ability"].toObject();
+    return true;
 }
 
 QJsonObject Shmatte::toJson()
 {
-
+    QJsonObject result = Card::toJson();
+    result["bonus"] = QString::number(_bonus);
+    result["gender"] = QString::number(_gender);
+    result["limb"] = QString::number(_limb);
+    result["race"] = QString::number(_race);
+    result["class"] = QString::number(_class);
+    result["big"] = QString::number(_big);
+    result["incompatibleClass"] = QString::number(_incompatibleClass);
+    result["ability"] = _ability;
+    return result;
 }
 
 Classes Shmatte::getClass() const

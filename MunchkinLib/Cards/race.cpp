@@ -60,10 +60,23 @@ bool Race::canAddtoTable(Player *player, QList<Card *> &errCards)
 
 bool Race::fromJson(QJsonObject json)
 {
-
+    if (!json.contains("race") ||
+        !json.contains("ability"))
+    {
+        emit error(8);
+        return false;
+    }
+    if (!Card::fromJson(json))
+        return false;
+    _race = (Races)json["race"].toInt();
+    _ability = json["ability"].toObject();
+    return true;
 }
 
 QJsonObject Race::toJson()
 {
-
+    QJsonObject result = Card::toJson();
+    result["class"] = (int)_race;
+    result["ability"] = _ability;
+    return result;
 }

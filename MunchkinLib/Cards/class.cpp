@@ -79,7 +79,11 @@ bool Class::fromJson(QJsonObject json)
 
 QJsonObject Class::toJson()
 {
-
+    QJsonObject result = Card::toJson();
+    result["class"] = (int)_class;
+    result["ability1"] = _ability1;
+    result["ability2"] = _ability2;
+    return result;
 }
 
 QJsonObject Class::ability2() const
