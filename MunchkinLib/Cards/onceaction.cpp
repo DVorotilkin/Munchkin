@@ -3,6 +3,10 @@
 OnceAction::OnceAction(uint id, QString name, bool type, QJsonObject action):
     Card(id, name, type), _action(action){}
 
+OnceAction::OnceAction() :
+    Card(0, "", false),
+    _action(){}
+
 QJsonObject OnceAction::action() const
 {
     return _action;

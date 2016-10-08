@@ -9,6 +9,7 @@ class MUNCHKINLIBSHARED_EXPORT Monster : public Card
 {
 public:
     Monster(uint id, QString name, bool type, quint8 damage, quint8 lvl, QJsonObject ability, QJsonObject badStash);
+    Monster();
     quint8 _damage;
     quint8 lvl() const;
     void doAbility();

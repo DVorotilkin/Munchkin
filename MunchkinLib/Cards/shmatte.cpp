@@ -4,6 +4,17 @@
 Shmatte::Shmatte(uint id, QString name, bool type, quint8 bonus, Gender gender, Body limb, Races race, Classes __class, bool big, Classes incompatibleClass, QJsonObject ability):
     Card(id, name, type), _bonus(bonus), _gender(gender), _limb(limb), _race(race), _class(__class), _big(big), _incompatibleClass(incompatibleClass), _ability(ability){}
 
+Shmatte::Shmatte() :
+    Card(0, "", false),
+    _bonus(0),
+    _gender(Gender::AnyGender),
+    _limb(Body::Nowhere),
+    _race(Races::NoRace),
+    _class(Classes::NoClass),
+    _big(false),
+    _incompatibleClass(Classes::NoClass),
+    _ability(){}
+
 quint8 Shmatte::bonus() const
 {
     return _bonus;

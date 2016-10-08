@@ -9,6 +9,7 @@ class MUNCHKINLIBSHARED_EXPORT OnceAction : Card
 {
 public:
     OnceAction(uint id, QString name, bool type, QJsonObject action);
+    OnceAction();
     QJsonObject action() const;
     void doAction();
     virtual QByteArray toByteArray();

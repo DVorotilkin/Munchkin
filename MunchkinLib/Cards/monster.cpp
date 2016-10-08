@@ -3,6 +3,13 @@
 Monster::Monster(uint id, QString name, bool type, quint8 lvl, quint8 damage, QJsonObject ability, QJsonObject badStash):
     Card(id, name, type), _damage(damage), _lvl(lvl), _ability(ability), _badStash(badStash){}
 
+Monster::Monster() :
+    Card(0, "", false),
+    _damage(0),
+    _lvl(0),
+    _ability(),
+    _badStash(){}
+
 quint8 Monster::lvl() const
 {
     return _lvl;

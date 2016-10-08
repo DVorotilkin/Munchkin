@@ -20,6 +20,7 @@ class MUNCHKINLIBSHARED_EXPORT Class : public Card
 {
 public:
     Class(uint id, QString name, bool type, Classes __class, QJsonObject ability1, QJsonObject ability2);
+    Class();
     Classes getClass() const;
     QJsonObject ability1() const;
     void doAbility1();

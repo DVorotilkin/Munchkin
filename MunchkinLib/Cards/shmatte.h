@@ -27,6 +27,7 @@ class MUNCHKINLIBSHARED_EXPORT Shmatte : public Card
 {
 public:
     Shmatte(uint id, QString name, bool type, quint8 bonus, Gender gender, Body limb, Races race, Classes __class, bool big, Classes incompatibleClass, QJsonObject ability);
+    Shmatte();
     quint8 bonus() const;
     Races race() const;
     Classes getClass() const;

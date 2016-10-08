@@ -18,6 +18,7 @@ class MUNCHKINLIBSHARED_EXPORT Race : public Card
 {
 public:
     Race(uint id, QString name, bool type, Races race, QJsonObject ability);
+    Race();
     Races race() const;
     void doAbility();
     QJsonObject ability() const;

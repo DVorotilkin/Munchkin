@@ -5,6 +5,12 @@
 Class::Class(uint id, QString name, bool type, Classes __class, QJsonObject ability1, QJsonObject ability2):
     Card(id, name, type), _class(__class), _ability1(ability1), _ability2(ability2){}
 
+Class::Class():
+    Card(0, "", false),
+    _class(Classes::NoClass),
+    _ability1(),
+    _ability2(){}
+
 Classes Class::getClass() const
 {
     return _class;

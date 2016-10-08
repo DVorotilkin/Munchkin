@@ -4,6 +4,11 @@
 Race::Race(uint id, QString name, bool type, Races race, QJsonObject ability):
     Card(id, name, type), _race(race), _ability(ability){}
 
+Race::Race() :
+    Card(0, "", false),
+    _race(Races::NoRace),
+    _ability(){}
+
 Races Race::race() const
 {
     return _race;
