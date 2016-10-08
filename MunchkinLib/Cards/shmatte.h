@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SHMATTE_H
 #define SHMATTE_H
 
@@ -25,25 +26,31 @@ enum Gender
 class MUNCHKINLIBSHARED_EXPORT Shmatte : public Card
 {
 public:
-    Shmatte(uint id, QString name, bool type, quint8 bonus, Gender gender, Body limb, Races race, Classes __class, Classes incompatibleClass, QByteArray ability);
+    Shmatte(uint id, QString name, bool type, quint8 bonus, Gender gender, Body limb, Races race, Classes __class, bool big, Classes incompatibleClass, QJsonObject ability);
+    Shmatte();
     quint8 bonus() const;
     Races race() const;
     Classes getClass() const;
-    const QByteArray ability() const;
+    const QJsonObject ability() const;
     void doAbility();
     Gender gender() const;
     Body limb() const;
-
     Classes incompatibleClass() const;
+    virtual QByteArray toByteArray();
+    virtual bool canAddtoTable(Player *player, QList<Card*>& errCards);
+    virtual bool fromJson(QJsonObject json);
+    virtual QJsonObject toJson();
 
 private:
-    Gender _gender;
     quint8 _bonus;
+    Gender _gender;
+    Body _limb; //конечность (куда одевается)
     Races _race;
     Classes _class;
+    bool _big;
     Classes _incompatibleClass; //несовместимый класс
-    QByteArray _ability;
-    Body _limb; //конечность (куда одевается)
+    QJsonObject _ability;
+
 };
 
 #endif // SHMATTE_H

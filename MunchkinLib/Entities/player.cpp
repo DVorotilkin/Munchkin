@@ -2,108 +2,37 @@
 
 Player::Player():_hand(), _table(), _tap()
 {
-    _lvl = _damage = 1;
-    _runAwayChance = _luck = 0;
+    lvl = damage = 1;
+    runAwayChance = luck = 0;
     for (int i = 0; i < 5; ++i)
         _body[i] = 0;
     _race[0] = Races::Man;
     _race[1] = Races::Man;
     _class[0] = Classes::NoClass;
     _class[1] = Classes::NoClass;
-    _raceCocktail = _superMunchkin = false;
-    _gender = Gender::Boy;
+    raceCocktail = superMunchkin = false;
+    gender = Gender::Boy;
 }
 
 bool Player::canAddCardToTable(Card *card, QList<Card*>& errCards)
 {
-    if (!_hand.contains(card)) //exeption бы
+    if (!_hand.contains(card))
     {
         emit error(404);
         return false;
     }
-    {//шмотка
-        Shmatte *tmp = dynamic_cast<Shmatte*>(card);
-        if (tmp != NULL)
-            return isShmatteValid(tmp);
-
-    }
-    {//класс
-        Class *tmp = dynamic_cast<Class*>(card);
-        if (tmp != NULL)
-        {
-            if (!isClassValid(tmp))
-                return false;
-            for (auto i = _table.begin(); i != _table.end(); ++i)
-            {
-                Shmatte *shm = dynamic_cast<Shmatte*>(card);
-                if (shm == NULL)
-                    continue;
-                if (shm->getClass() != _class[0] && shm->getClass() != _class[1])
-                    errCards.append((Card*)shm);
-            }
-            if (!errCards.empty())
-            {
-                emit error(5);
-                return true;
-            }
-        }
-
-    }
-    {//раса
-        Race *tmp = dynamic_cast<Race*>(card);
-        if (tmp != NULL)
-        {
-            if (!isRaceValid(tmp))
-                return false;
-            for (auto i = _table.begin(); i != _table.end(); ++i)
-            {
-                Shmatte *shm = dynamic_cast<Shmatte*>(card);
-                if (shm == NULL)
-                    continue;
-                if (shm->race() != _race[0] && shm->race() != _race[1])
-                    errCards.append((Card*)shm);
-            }
-            if (!errCards.empty())
-            {
-                emit error(5);
-                return true;
-            }
-        }
-
-    }
-    {
-        Monster *tmp = dynamic_cast<Monster*>(card);
-        if (tmp != NULL)
-        {
-            emit error(6);
-            return false;
-        }
-    }
-    {
-        OnceAction *tmp = dynamic_cast<OnceAction*>(card);
-        if (tmp != NULL)
-        {
-            emit error(7);
-            return false;
-        }
-    }
-    return true;
+    return card->canAddtoTable(this, errCards);
 }
 
 void Player::addCardToTable(Card *card)
 {
-    {//шмотка
-        Shmatte *tmp = dynamic_cast<Shmatte*>(card);
-        if (tmp != NULL)
+    if (Shmatte *tmp = dynamic_cast<Shmatte*>(card))
         {
             _hand.removeOne(card);
             _table.append(card);
-            _damage += tmp->bonus();
+            damage += tmp->bonus();
         }
-    }
-    {//класс
-        Class *tmp = dynamic_cast<Class*>(card);
-        if (tmp != NULL)
+    if (Class *tmp = dynamic_cast<Class*>(card))
         {
             if (_class[0] == Classes::NoClass)
                 _class[0] = tmp->getClass();
@@ -121,10 +50,7 @@ void Player::addCardToTable(Card *card)
                 }
             }
         }
-    }
-    {//раса
-        Race *tmp = dynamic_cast<Race*>(card);
-        if (tmp != NULL)
+    if (Race *tmp = dynamic_cast<Race*>(card))
         {
             if (_race[0] == Races::NoRace)
                 _race[0] = tmp->race();
@@ -142,7 +68,6 @@ void Player::addCardToTable(Card *card)
                 }
             }
         }
-    }
 }
 
 void Player::addCardToHand(Card *card)
@@ -151,93 +76,96 @@ void Player::addCardToHand(Card *card)
 
 }
 
-bool Player::isShmatteValid(Shmatte *shmatte)
+QByteArray Player::toByteArray()
 {
-    if (shmatte->getClass() != Classes::NoClass)
-    {
-        if ((_superMunchkin) && (_class[0] != shmatte->getClass()) && (_class[1] != shmatte->getClass()))
-        {
-            emit error(1);
-            return false;
-
-        }
-        if ((!_superMunchkin) && (_class[0] != shmatte->getClass()))
-        {
-            emit error(1);
-            return false;
-        }
-    }
-    if (shmatte->incompatibleClass() != Classes::NoClass)//еcть несовместимые классы
-    {
-        if ((!_superMunchkin) && (_class[0] == shmatte->incompatibleClass()))
-        {
-            emit error(1);
-            return false;
-        }
-    }
-    if (shmatte->race() != Races::NoRace)
-    {
-        if ((_raceCocktail) && (_race[0] != shmatte->race()) && (_race[1] != shmatte->race()))
-        {
-            emit error(2);
-            return false;
-        }
-        if ((!_raceCocktail) && (_race[0] != shmatte->race()))
-        {
-            emit error(1);
-            return false;
-        }
-    }
-    if (_gender != shmatte->gender())
-    {
-        emit error(3);
-        return false;
-    }
-    if ((shmatte->limb() == Body::Hand) && (_body[Body::Hands] = true))
-    {
-        emit error(4);
-        return false;
-    }
-    if ((shmatte->limb() == Body::Hands) && (_body[Body::Hand] = true))
-    {
-        emit error(4);
-        return false;
-    }
-    if (_body[shmatte->limb()] == true)
-    {
-        emit error(4);
-        return false;
-    }
-    return true;
-
+    QByteArray result;
+    result.append(lvl);
+    result.append(damage);
+    result.append(runAwayChance);
+    result.append(luck);
+    result.append(raceCocktail);
+    result.append(superMunchkin);
+    result.append(gender);
+    result.append(_race[0]);
+    result.append(_race[1]);
+    result.append(_class[0]);
+    result.append(_class[1]);
+    for (int i = 0; i < 5; ++i)
+        result.append(_body[i]);
+    for (auto i = _hand.begin(); i != _hand.end(); ++i)
+        result.append((*i)->toByteArray());
+    for (auto i = _table.begin(); i != _table.end(); ++i)
+        result.append((*i)->toByteArray());
+    for (auto i = _tap.begin(); i != _tap.end(); ++i)
+        result.append((*i)->toByteArray());
+    return result;
 }
 
-bool Player::isClassValid(Class *__class)
+QByteArray Player::getHash()
 {
-    if (_superMunchkin && (_class[0] != Classes::NoClass) && _class[1] != Classes::NoClass)
-    {
-        emit error(1);
-        return false;
-    }
-    if (!_superMunchkin && _class[0] != Classes::NoClass)
-    {
-        emit error(1);
-        return false;
-    }
-    return true;
+    return QCryptographicHash::hash(toByteArray(), QCryptographicHash::Md5);
 }
 
-bool Player::isRaceValid(Race *race)
+QJsonObject Player::toJson()
 {
-    if (_raceCocktail && (_race[0] != Races::NoRace) && _race[1] != Races::NoRace)
+    QJsonObject result;
+    result["lvl"] = QString::number(lvl);
+    result["damage"] = QString::number(damage);
+    result["runAwayChance"] = QString::number(runAwayChance);
+    result["luck"] = QString::number(luck);
+    result["raceCocktail"] = QString::number(raceCocktail);
+    result["superMunchkin"] = QString::number(superMunchkin);
+    result["gender"] = QString::number(gender);
+    result["bigShmattes"] = QString::number(_bigShmattes);
+    result["race0"] = QString::number(_race[0]);
+    result["race1"] = QString::number(_race[1]);
+    result["class0"] = QString::number(_class[0]);
+    result["class1"] = QString::number(_class[1]);
+    QJsonArray hand;
+    for (auto i = _hand.begin(); i != _hand.end(); ++i)
+        hand.append((*i)->toJson());
+    result["hand"] = hand;
+    QJsonArray table;
+    for (auto i = _table.begin(); i != _table.end(); ++i)
+        table.append((*i)->toJson());
+    result["table"] = table;
+    QJsonArray tap;
+    for (auto i = _tap.begin(); i != _tap.end(); ++i)
+        tap.append((*i)->toJson());
+    result["tap"] = tap;
+    QJsonArray body;
+    QString tmp = "body";
+    for (int i = 0; i < 5; ++i)
     {
-        emit error(2);
-        return false;
+        result[tmp+QString::number(i)] =QString::number( _body[i]);
     }
-    if (!_raceCocktail && _race[0] != Races::NoRace)
-    {
-        emit error(2);
-        return false;
-    }
-    return true;
+    return result;
 }
+
+Races *Player::race()
+{
+    return _race;
+}
+
+Classes *Player::getClass()
+{
+    return _class;
+}
+
+bool *Player::body()
+{
+    return _body;
+}
+
+QList<Card *> Player::table()
+{
+    return _table;
+}
+
+qint8 Player::bigShmattes() const
+{
+    return _bigShmattes;
+}
+
+
+
