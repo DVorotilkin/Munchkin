@@ -1,7 +1,7 @@
 #ifndef MONSTER_H
 #define MONSTER_H
 
-#include "munchkinlib_global.h"
+#include "../munchkinlib_global.h"
 #include "card.h"
 #include "action.h"
 

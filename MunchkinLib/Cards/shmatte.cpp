@@ -1,5 +1,5 @@
 #include "shmatte.h"
-#include "Entities/player.h"
+#include "../Entities/player.h"
 
 Shmatte::Shmatte(uint id, QString name, bool type, quint8 bonus, Gender gender, Body limb, Races race, Classes __class, bool big, Classes incompatibleClass, QJsonObject ability):
     Card(id, name, type), _bonus(bonus), _gender(gender), _limb(limb), _race(race), _class(__class), _big(big), _incompatibleClass(incompatibleClass), _ability(ability){}

@@ -1,7 +1,7 @@
 #ifndef RACE_H
 #define RACE_H
 
-#include "munchkinlib_global.h"
+#include "../munchkinlib_global.h"
 #include "card.h"
 #include "action.h"
 

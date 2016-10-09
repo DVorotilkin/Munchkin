@@ -1,5 +1,5 @@
 #include "race.h"
-#include "Entities/player.h"
+#include "../Entities/player.h"
 
 Race::Race(uint id, QString name, bool type, Races race, QJsonObject ability):
     Card(id, name, type), _race(race), _ability(ability){}
@@ -52,7 +52,7 @@ bool Race::canAddtoTable(Player *player, QList<Card *> &errCards)
         Shmatte *shm = dynamic_cast<Shmatte*>(*i);
         if (shm == NULL)
             continue;
-        if (shm->race() != player->race()[0] && shm->race() != player->race()[1])
+        if (shm->race() != _race && shm->race() != _race)
             errCards.append((Card*)shm);
     }
     if (!errCards.empty())
