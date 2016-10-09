@@ -2,7 +2,7 @@
 #ifndef CARD_H
 #define CARD_H
 
-#include "munchkinlib_global.h"
+#include "../munchkinlib_global.h"
 #include <QObject>
 #include <QJsonDocument>
 #include <QJsonObject>

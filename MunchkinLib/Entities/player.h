@@ -2,9 +2,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "Cards/shmatte.h"
-#include "Cards/onceaction.h"
-#include "Cards/monster.h"
+#include "../Cards/shmatte.h"
+#include "../Cards/onceaction.h"
+#include "../Cards/monster.h"
 #include <QList>
 #include <QCryptographicHash>
 #include <QJsonArray>

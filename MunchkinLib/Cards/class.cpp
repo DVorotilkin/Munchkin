@@ -1,6 +1,6 @@
 #include "class.h"
 #include "shmatte.h"
-#include "Entities/player.h"
+#include "../Entities/player.h"
 
 Class::Class(uint id, QString name, bool type, Classes __class, QJsonObject ability1, QJsonObject ability2):
     Card(id, name, type), _class(__class), _ability1(ability1), _ability2(ability2){}
@@ -55,7 +55,7 @@ bool Class::canAddtoTable(Player *player, QList<Card*>& errCards)
         Shmatte *shm = dynamic_cast<Shmatte*>(*i);
         if (shm == NULL)
             continue;
-        if (shm->getClass() != player->getClass()[0] && shm->getClass() != player->getClass()[1])
+        if (shm->getClass() != _class)
             errCards.append((Card*)shm);
     }
     if (!errCards.empty())

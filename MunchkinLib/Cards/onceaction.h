@@ -1,7 +1,7 @@
 #ifndef ONCEACTION_H
 #define ONCEACTION_H
 
-#include "munchkinlib_global.h"
+#include "../munchkinlib_global.h"
 #include "card.h"
 #include "action.h"
 

@@ -2,7 +2,7 @@
 #ifndef SHMATTE_H
 #define SHMATTE_H
 
-#include "munchkinlib_global.h"
+#include "../munchkinlib_global.h"
 #include "race.h"
 #include "class.h"
 

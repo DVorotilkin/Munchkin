@@ -6,7 +6,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QByteArray>
-#include "munchkinlib_global.h"
+#include "../munchkinlib_global.h"
 
 class MUNCHKINLIBSHARED_EXPORT Action : QObject
 {
