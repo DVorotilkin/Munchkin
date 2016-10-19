@@ -1,10 +1,10 @@
 #include "onceaction.h"
 
-OnceAction::OnceAction(uint id, QString name, bool type, QJsonObject action):
-    Card(id, name, type), _action(action){}
+OnceAction::OnceAction(uint id, QString name, QString description, bool type, QJsonObject action):
+    Card(id, name, description, type), _action(action){}
 
 OnceAction::OnceAction() :
-    Card(0, "", false),
+    Card(0, "", "", false),
     _action(){}
 
 QJsonObject OnceAction::action() const
@@ -53,4 +53,9 @@ QJsonObject OnceAction::toJson()
     QJsonObject result = Card::toJson();
     result["action"] = _action;
     return result;
+}
+
+bool operator ==(const OnceAction &l, const OnceAction &r)
+{
+
 }

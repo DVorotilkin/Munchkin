@@ -19,7 +19,7 @@ enum Classes
 class MUNCHKINLIBSHARED_EXPORT Class : public Card
 {
 public:
-    Class(uint id, QString name, bool type, Classes __class, QJsonObject ability1, QJsonObject ability2);
+    Class(uint id, QString name, QString description, Classes __class, QJsonObject ability1, QJsonObject ability2);
     Class();
     Classes getClass() const;
     QJsonObject ability1() const;
@@ -30,6 +30,7 @@ public:
     virtual bool canAddtoTable(Player *player, QList<Card*>& errCards);
     virtual bool fromJson(QJsonObject json);
     virtual QJsonObject toJson();
+    friend bool operator ==(const Class &l, const Class &r);
 
 private:
     Classes _class;

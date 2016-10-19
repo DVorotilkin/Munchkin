@@ -14,7 +14,7 @@ class MUNCHKINLIBSHARED_EXPORT Card : public QObject
     Q_OBJECT
 
 public:
-    Card(uint id, QString name, bool type);
+    Card(uint id, QString name, QString description, bool type);
     QString name() const;
     uint id() const;
     bool type() const;
@@ -23,6 +23,7 @@ public:
     virtual bool canAddtoTable(Player *player, QList<Card*>& errCards) = 0;
     virtual bool fromJson(QJsonObject json);
     virtual QJsonObject toJson();
+    friend bool operator ==(const Card &l, const Card &r);
 
 protected:
     QString _name;

@@ -1,11 +1,11 @@
 #include "shmatte.h"
 #include "../Entities/player.h"
 
-Shmatte::Shmatte(uint id, QString name, bool type, quint8 bonus, Gender gender, Body limb, Races race, Classes __class, bool big, Classes incompatibleClass, QJsonObject ability):
-    Card(id, name, type), _bonus(bonus), _gender(gender), _limb(limb), _race(race), _class(__class), _big(big), _incompatibleClass(incompatibleClass), _ability(ability){}
+Shmatte::Shmatte(uint id, QString name,QString description, quint8 bonus, Gender gender, Body limb, Races race, Classes __class, bool big, Classes incompatibleClass, QJsonObject ability):
+    Card(id, name, description, false), _bonus(bonus), _gender(gender), _limb(limb), _race(race), _class(__class), _big(big), _incompatibleClass(incompatibleClass), _ability(ability){}
 
 Shmatte::Shmatte() :
-    Card(0, "", false),
+    Card(0, "", "", true),
     _bonus(0),
     _gender(Gender::AnyGender),
     _limb(Body::Nowhere),
@@ -48,6 +48,11 @@ Body Shmatte::limb() const
 Classes Shmatte::incompatibleClass() const
 {
     return _incompatibleClass;
+}
+
+Classes Shmatte::getClass() const
+{
+    return _class;
 }
 
 QByteArray Shmatte::toByteArray()
@@ -174,7 +179,8 @@ QJsonObject Shmatte::toJson()
     return result;
 }
 
-Classes Shmatte::getClass() const
+bool operator ==(const Shmatte &l, const Shmatte &r)
 {
-    return _class;
+
 }
+

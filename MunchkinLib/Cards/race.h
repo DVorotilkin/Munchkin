@@ -17,7 +17,7 @@ enum Races
 class MUNCHKINLIBSHARED_EXPORT Race : public Card
 {
 public:
-    Race(uint id, QString name, bool type, Races race, QJsonObject ability);
+    Race(uint id, QString name, QString description, Races race, QJsonObject ability);
     Race();
     Races race() const;
     void doAbility();
@@ -26,6 +26,7 @@ public:
     virtual bool canAddtoTable(Player *player, QList<Card*> &errCards);
     virtual bool fromJson(QJsonObject json);
     virtual QJsonObject toJson();
+    friend bool operator ==(const Race &l, const Race &r);
 
 private:
     Races _race;

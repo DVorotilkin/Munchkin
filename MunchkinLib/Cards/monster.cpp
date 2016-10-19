@@ -1,10 +1,10 @@
 #include "monster.h"
 
-Monster::Monster(uint id, QString name, bool type, quint8 lvl, quint8 damage, QJsonObject ability, QJsonObject badStash):
-    Card(id, name, type), _damage(damage), _lvl(lvl), _ability(ability), _badStash(badStash){}
+Monster::Monster(uint id, QString name, QString description, quint8 lvl, quint8 damage, QJsonObject ability, QJsonObject badStash):
+    Card(id, name, description, false), _damage(damage), _lvl(lvl), _ability(ability), _badStash(badStash){}
 
 Monster::Monster() :
-    Card(0, "", false),
+    Card(0, "", "", false),
     _damage(0),
     _lvl(0),
     _ability(),
@@ -83,4 +83,9 @@ QJsonObject Monster::toJson()
     result["ability"] = _ability;
     result["badStash"] = _badStash;
     return result;
+}
+
+bool operator ==(const Monster &l, const Monster &r)
+{
+
 }

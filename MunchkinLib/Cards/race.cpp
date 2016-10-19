@@ -1,11 +1,11 @@
 #include "race.h"
 #include "../Entities/player.h"
 
-Race::Race(uint id, QString name, bool type, Races race, QJsonObject ability):
-    Card(id, name, type), _race(race), _ability(ability){}
+Race::Race(uint id, QString name, QString description, Races race, QJsonObject ability):
+    Card(id, name, description, false), _race(race), _ability(ability){}
 
 Race::Race() :
-    Card(0, "", false),
+    Card(0, "", "", false),
     _race(Races::NoRace),
     _ability(){}
 
@@ -31,7 +31,8 @@ QByteArray Race::toByteArray()
     result.append(_description);
     result.append(_type);
     result.append(_race);
-    result.append(QJsonDocument(_ability).toBinaryData());
+    if (!_ability.isEmpty())
+        result.append(QJsonDocument(_ability).toBinaryData());
     return result;
 }
 
@@ -85,3 +86,9 @@ QJsonObject Race::toJson()
     result["ability"] = _ability;
     return result;
 }
+
+bool operator ==(const Race &l, const Race &r)
+{
+
+}
+

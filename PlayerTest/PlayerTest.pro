@@ -15,4 +15,6 @@ SOURCES += main.cpp \
     error( "includeDirs not included. Filename: $$PWD/includeNetwork.pri" )
 }
 
+include($$PWD/../../googletest-release-1.8.0/gtest.pri)
+
 

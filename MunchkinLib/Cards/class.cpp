@@ -2,11 +2,11 @@
 #include "shmatte.h"
 #include "../Entities/player.h"
 
-Class::Class(uint id, QString name, bool type, Classes __class, QJsonObject ability1, QJsonObject ability2):
-    Card(id, name, type), _class(__class), _ability1(ability1), _ability2(ability2){}
+Class::Class(uint id, QString name, QString description, Classes __class, QJsonObject ability1, QJsonObject ability2):
+    Card(id, name, description, false), _class(__class), _ability1(ability1), _ability2(ability2){}
 
 Class::Class():
-    Card(0, "", false),
+    Card(0, "", "", false),
     _class(Classes::NoClass),
     _ability1(),
     _ability2(){}
@@ -30,11 +30,14 @@ QByteArray Class::toByteArray()
 {
     QByteArray result;
     result.append(_id);
+    result.append(_name);
     result.append(_description);
     result.append(_type);
     result.append(_class);
-    result.append(QJsonDocument(_ability1).toBinaryData());
-    result.append(QJsonDocument(_ability2).toBinaryData());
+    if (!_ability1.isEmpty())
+        result.append(QJsonDocument(_ability1).toBinaryData());
+    if (!_ability2.isEmpty())
+        result.append(QJsonDocument(_ability2).toBinaryData());
     return result;
 }
 
@@ -86,10 +89,19 @@ bool Class::fromJson(QJsonObject json)
 QJsonObject Class::toJson()
 {
     QJsonObject result = Card::toJson();
-    result["class"] = (int)_class;
+    result["class"] = QJsonValue((int)_class);
     result["ability1"] = _ability1;
     result["ability2"] = _ability2;
     return result;
+}
+
+bool operator ==(const Class &l, const Class &r)
+{
+    if (!( (Card&)l == (Card&)r)) return false;
+    if (l._class != r._class) return false;
+    if (l._ability1 != r._ability1) return false;
+    if (l._ability2 != r._ability2) return false;
+    return true;
 }
 
 QJsonObject Class::ability2() const

@@ -8,7 +8,7 @@
 class MUNCHKINLIBSHARED_EXPORT OnceAction : Card
 {
 public:
-    OnceAction(uint id, QString name, bool type, QJsonObject action);
+    OnceAction(uint id, QString name, QString description, bool type, QJsonObject action);
     OnceAction();
     QJsonObject action() const;
     void doAction();
@@ -16,6 +16,7 @@ public:
     virtual bool canAddtoTable(Player *player, QList<Card*>& errCards);
     virtual bool fromJson(QJsonObject json);
     virtual QJsonObject toJson();
+    friend bool operator ==(const OnceAction &l, const OnceAction &r);
 
 private:
     QJsonObject _action;
