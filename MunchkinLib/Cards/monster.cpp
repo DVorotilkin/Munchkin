@@ -87,5 +87,10 @@ QJsonObject Monster::toJson()
 
 bool operator ==(const Monster &l, const Monster &r)
 {
-
+    if (!( (Card&)l == (Card&)r)) return false;
+    if (l._lvl != r._lvl) return false;
+    if (l._damage != r._damage) return false;
+    if (l._ability != r._ability) return false;
+    if (l._badStash != r._badStash) return false;
+    return true;
 }

@@ -30,7 +30,7 @@ TEST(CardTest, RaceTest)
     Race c1(1, "Test", "TestRaceCard", Races::Elf, b);
     QJsonObject json = c1.toJson();
     Race c2;
-    c2.fromJson(json);
+    ASSERT_TRUE(c2.fromJson(json));
     EXPECT_EQ(c1.id(), c2.id());
     EXPECT_EQ(c1.name(), c2.name());
     EXPECT_EQ(c1.description(), c2.description());

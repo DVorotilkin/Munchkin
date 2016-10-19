@@ -82,13 +82,16 @@ bool Race::fromJson(QJsonObject json)
 QJsonObject Race::toJson()
 {
     QJsonObject result = Card::toJson();
-    result["class"] = (int)_race;
+    result["race"] = QJsonValue((int)_race);
     result["ability"] = _ability;
     return result;
 }
 
 bool operator ==(const Race &l, const Race &r)
 {
-
+    if (!( (Card&)l == (Card&)r)) return false;
+    if (l._race != r._race) return false;
+    if (l._ability != r._ability) return false;
+    return true;
 }
 
