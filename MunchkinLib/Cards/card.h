@@ -26,10 +26,10 @@ public:
     friend bool operator ==(const Card &l, const Card &r);
 
 protected:
-    QString _name;
-    QString _description;
-    uint _id;
-    bool _type; //Door - false, treasure - true
+    const QString _name;
+    const QString _description;
+    const uint _id;
+    const bool _type; //Door - false, treasure - true
 
 signals:
     error(int);

@@ -5,7 +5,16 @@ Shmatte::Shmatte(uint id, QString name,QString description, quint8 bonus, Gender
     Card(id, name, description, false), _bonus(bonus), _gender(gender), _limb(limb), _race(race), _class(__class), _big(big), _incompatibleClass(incompatibleClass), _ability(ability){}
 
 Shmatte::Shmatte(QJsonObject json) :
-    Card(json)
+    Card(json),
+    _bonus(json["bonus"].toInt()),
+    _gender((Gender)json["gender"].toInt()),
+    _limb((Body)json["limb"].toInt()),
+    _race((Races)json["race"].toInt()),
+    _class((Classes)json["class"].toInt()),
+    _big(json["big"].toBool()),
+    _incompatibleClass((Classes)json["incompatibleClass"].toInt()),
+    _ability(json["ability"].toObject())
+
 {
     if (!json.contains("bonus") ||
         !json.contains("gender") ||
@@ -15,18 +24,7 @@ Shmatte::Shmatte(QJsonObject json) :
         !json.contains("big") ||
         !json.contains("incompatibleClass") ||
         !json.contains("ability"))
-    {
         emit error(8);
-        return;
-    }
-    _bonus = json["bonus"].toInt();
-    _gender = (Gender)json["gender"].toInt();
-    _limb = (Body)json["limb"].toInt();
-    _race = (Races)json["race"].toInt();
-    _class = (Classes)json["class"].toInt();
-    _big = (Races)json["big"].toBool();
-    _incompatibleClass = (Classes)json["incompatibleClass"].toInt();
-    _ability = json["ability"].toObject();
 }
 
 

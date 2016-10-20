@@ -4,14 +4,10 @@ OnceAction::OnceAction(uint id, QString name, QString description, bool type, QJ
     Card(id, name, description, type), _action(action){}
 
 OnceAction::OnceAction(QJsonObject json) :
-    Card(json)
+    Card(json), _action(json["action"].toObject())
 {
     if (!json.contains("action"))
-    {
         emit error(8);
-        return;
-    }
-    _action = json["action"].toObject();
 }
 
 QJsonObject OnceAction::action() const

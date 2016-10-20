@@ -32,9 +32,9 @@ public:
     friend bool operator ==(const Class &l, const Class &r);
 
 private:
-    Classes _class;
-    QJsonObject _ability1;
-    QJsonObject _ability2;
+    const Classes _class;
+    const QJsonObject _ability1;
+    const QJsonObject _ability2;
 };
 
 #endif // CLASS_H

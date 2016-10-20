@@ -42,14 +42,14 @@ public:
     friend bool operator ==(const Shmatte &l, const Shmatte &r);
 
 private:
-    quint8 _bonus;
-    Gender _gender;
-    Body _limb; //конечность (куда одевается)
-    Races _race;
-    Classes _class;
-    bool _big;
-    Classes _incompatibleClass; //несовместимый класс
-    QJsonObject _ability;
+    const quint8 _bonus;
+    const Gender _gender;
+    const Body _limb; //конечность (куда одевается)
+    const Races _race;
+    const Classes _class;
+    const bool _big;
+    const Classes _incompatibleClass; //несовместимый класс
+    const QJsonObject _ability;
 
 };
 

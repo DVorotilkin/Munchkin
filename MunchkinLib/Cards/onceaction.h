@@ -18,7 +18,7 @@ public:
     friend bool operator ==(const OnceAction &l, const OnceAction &r);
 
 private:
-    QJsonObject _action;
+    const QJsonObject _action;
 };
 
 #endif // ONCEACTION_H

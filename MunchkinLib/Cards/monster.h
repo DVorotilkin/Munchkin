@@ -24,9 +24,9 @@ public:
     friend bool operator ==(const Monster &l, const Monster &r);
 
 private:
-    quint8 _lvl;
-    QJsonObject _ability;
-    QJsonObject _badStash;
+    const quint8 _lvl;
+    const QJsonObject _ability;
+    const QJsonObject _badStash;
 };
 
 #endif // MONSTER_H

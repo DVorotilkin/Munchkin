@@ -1,24 +1,20 @@
 #include "card.h"
 
-Card::Card(uint id, QString name, QString description, bool type)
-{
-    _id = id;
-    _name = name;
-    _description = description;
-    _type = type;
-}
+Card::Card(uint id, QString name, QString description, bool type):
+    _id(id),
+    _name(name),
+    _description(description),
+    _type(type){}
 
-Card::Card(QJsonObject json)
+Card::Card(QJsonObject json):
+    _id(json["id"].toInt()),
+    _name(json["name"].toString()),
+    _description(json["description"].toString()),
+    _type(json["type"].toBool())
 {
     if (!json.contains("id") || !json.contains("name") || !json.contains("description") ||!json.contains("type"))
-    {
         emit error(8);
-        return;
-    }
-    _id = json["id"].toInt();
-    _name = json["name"].toString();
-    _description = json["description"].toString();
-    _type = json["type"].toBool();
+
 }
 
 QString Card::name() const

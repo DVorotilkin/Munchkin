@@ -6,18 +6,12 @@ Class::Class(uint id, QString name, QString description, Classes __class, QJsonO
     Card(id, name, description, false), _class(__class), _ability1(ability1), _ability2(ability2){}
 
 Class::Class(QJsonObject json):
-    Card(json)
+    Card(json), _class((Classes)json["class"].toInt()), _ability1(json["ability1"].toObject()), _ability2(json["ability2"].toObject())
 {
     if (!json.contains("class") ||
         !json.contains("ability1") ||
         !json.contains("ability2"))
-    {
         emit error(8);
-        return;
-    }
-    _class = (Classes)json["class"].toInt();
-    _ability1 = json["ability1"].toObject();
-    _ability2 = json["ability2"].toObject();
 }
 
 Classes Class::getClass() const

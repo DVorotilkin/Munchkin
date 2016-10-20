@@ -4,20 +4,13 @@ Monster::Monster(uint id, QString name, QString description, quint8 lvl, quint8 
     Card(id, name, description, false), _damage(damage), _lvl(lvl), _ability(ability), _badStash(badStash){}
 
 Monster::Monster(QJsonObject json) :
-    Card(json)
+    Card(json), _damage(json["damage"].toInt()), _lvl(json["lvl"].toInt()), _ability(json["ability"].toObject()), _badStash(json["badStash"].toObject())
 {
     if (!json.contains("lvl") ||
         !json.contains("damage") ||
         !json.contains("ability") ||
         !json.contains("badStash"))
-    {
         emit error(8);
-        return;
-    }
-    _lvl = json["lvl"].toInt();
-    _damage = json["damage"].toInt();
-    _ability = json["ability"].toObject();
-    _badStash = json["badStash"].toObject();
 }
 
 quint8 Monster::lvl() const
