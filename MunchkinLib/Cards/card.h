@@ -15,21 +15,21 @@ class MUNCHKINLIBSHARED_EXPORT Card : public QObject
 
 public:
     Card(uint id, QString name, QString description, bool type);
+    Card(QJsonObject json);
     QString name() const;
     uint id() const;
     bool type() const;
     QString description() const;
-    virtual QByteArray toByteArray() = 0;
+    virtual QByteArray toByteArray();
     virtual bool canAddtoTable(Player *player, QList<Card*>& errCards) = 0;
-    virtual bool fromJson(QJsonObject json);
     virtual QJsonObject toJson();
     friend bool operator ==(const Card &l, const Card &r);
 
 protected:
-    QString _name;
-    QString _description;
-    uint _id;
-    bool _type; //Door - false, treasure - true
+    const QString _name;
+    const QString _description;
+    const uint _id;
+    const bool _type; //Door - false, treasure - true
 
 signals:
     error(int);

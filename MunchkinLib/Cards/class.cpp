@@ -5,11 +5,14 @@
 Class::Class(uint id, QString name, QString description, Classes __class, QJsonObject ability1, QJsonObject ability2):
     Card(id, name, description, false), _class(__class), _ability1(ability1), _ability2(ability2){}
 
-Class::Class():
-    Card(0, "", "", false),
-    _class(Classes::NoClass),
-    _ability1(),
-    _ability2(){}
+Class::Class(QJsonObject json):
+    Card(json), _class((Classes)json["class"].toInt()), _ability1(json["ability1"].toObject()), _ability2(json["ability2"].toObject())
+{
+    if (!json.contains("class") ||
+        !json.contains("ability1") ||
+        !json.contains("ability2"))
+        emit error(8);
+}
 
 Classes Class::getClass() const
 {
@@ -28,11 +31,7 @@ void Class::doAbility2()
 
 QByteArray Class::toByteArray()
 {
-    QByteArray result;
-    result.append(_id);
-    result.append(_name);
-    result.append(_description);
-    result.append(_type);
+    QByteArray result = Card::toByteArray();
     result.append(_class);
     if (!_ability1.isEmpty())
         result.append(QJsonDocument(_ability1).toBinaryData());
@@ -66,23 +65,6 @@ bool Class::canAddtoTable(Player *player, QList<Card*>& errCards)
         emit error(5);
         return true;
     }
-    return true;
-}
-
-bool Class::fromJson(QJsonObject json)
-{
-    if (!json.contains("class") ||
-        !json.contains("ability1") ||
-        !json.contains("ability2"))
-    {
-        emit error(8);
-        return false;
-    }
-    if (!Card::fromJson(json))
-        return false;
-    _class = (Classes)json["class"].toInt();
-    _ability1 = json["ability1"].toObject();
-    _ability2 = json["ability2"].toObject();
     return true;
 }
 

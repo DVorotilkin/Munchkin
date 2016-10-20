@@ -4,11 +4,18 @@
 Race::Race(uint id, QString name, QString description, Races race, QJsonObject ability):
     Card(id, name, description, false), _race(race), _ability(ability){}
 
-Race::Race() :
-    Card(0, "", "", false),
-    _race(Races::NoRace),
-    _ability(){}
-
+Race::Race(QJsonObject json) :
+    Card(json)
+{
+    if (!json.contains("race") ||
+        !json.contains("ability"))
+    {
+        emit error(8);
+        return;
+    }
+    _race = (Races)json["race"].toInt();
+    _ability = json["ability"].toObject();
+}
 Races Race::race() const
 {
     return _race;
@@ -26,10 +33,7 @@ QJsonObject Race::ability() const
 
 QByteArray Race::toByteArray()
 {
-    QByteArray result;
-    result.append(_id);
-    result.append(_description);
-    result.append(_type);
+    QByteArray result = Card::toByteArray();
     result.append(_race);
     if (!_ability.isEmpty())
         result.append(QJsonDocument(_ability).toBinaryData());
@@ -61,21 +65,6 @@ bool Race::canAddtoTable(Player *player, QList<Card *> &errCards)
         emit error(5);
         return true;
     }
-    return true;
-}
-
-bool Race::fromJson(QJsonObject json)
-{
-    if (!json.contains("race") ||
-        !json.contains("ability"))
-    {
-        emit error(8);
-        return false;
-    }
-    if (!Card::fromJson(json))
-        return false;
-    _race = (Races)json["race"].toInt();
-    _ability = json["ability"].toObject();
     return true;
 }
 

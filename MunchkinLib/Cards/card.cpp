@@ -1,11 +1,20 @@
 #include "card.h"
 
-Card::Card(uint id, QString name, QString description, bool type)
+Card::Card(uint id, QString name, QString description, bool type):
+    _id(id),
+    _name(name),
+    _description(description),
+    _type(type){}
+
+Card::Card(QJsonObject json):
+    _id(json["id"].toInt()),
+    _name(json["name"].toString()),
+    _description(json["description"].toString()),
+    _type(json["type"].toBool())
 {
-    _id = id;
-    _name = name;
-    _description = description;
-    _type = type;
+    if (!json.contains("id") || !json.contains("name") || !json.contains("description") ||!json.contains("type"))
+        emit error(8);
+
 }
 
 QString Card::name() const
@@ -28,18 +37,14 @@ QString Card::description() const
     return _description;
 }
 
-bool Card::fromJson(QJsonObject json)
+QByteArray Card::toByteArray()
 {
-    if (!json.contains("id") || !json.contains("name") || !json.contains("description") ||!json.contains("type"))
-    {
-        emit error(8);
-        return false;
-    }
-    _id = json["id"].toInt();
-    _name = json["name"].toString();
-    _description = json["description"].toString();
-    _type = json["type"].toBool();
-    return true;
+    QByteArray result;
+    result.append(_id);
+    result.append(_name);
+    result.append(_description);
+    result.append(_type);
+    return result;
 }
 
 QJsonObject Card::toJson()

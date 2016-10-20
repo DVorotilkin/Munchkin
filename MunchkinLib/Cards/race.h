@@ -18,13 +18,12 @@ class MUNCHKINLIBSHARED_EXPORT Race : public Card
 {
 public:
     Race(uint id, QString name, QString description, Races race, QJsonObject ability);
-    Race();
+    Race(QJsonObject json);
     Races race() const;
     void doAbility();
     QJsonObject ability() const;
     virtual QByteArray toByteArray();
     virtual bool canAddtoTable(Player *player, QList<Card*> &errCards);
-    virtual bool fromJson(QJsonObject json);
     virtual QJsonObject toJson();
     friend bool operator ==(const Race &l, const Race &r);
 

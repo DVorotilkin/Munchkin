@@ -4,16 +4,29 @@
 Shmatte::Shmatte(uint id, QString name,QString description, quint8 bonus, Gender gender, Body limb, Races race, Classes __class, bool big, Classes incompatibleClass, QJsonObject ability):
     Card(id, name, description, false), _bonus(bonus), _gender(gender), _limb(limb), _race(race), _class(__class), _big(big), _incompatibleClass(incompatibleClass), _ability(ability){}
 
-Shmatte::Shmatte() :
-    Card(0, "", "", true),
-    _bonus(0),
-    _gender(Gender::AnyGender),
-    _limb(Body::Nowhere),
-    _race(Races::NoRace),
-    _class(Classes::NoClass),
-    _big(false),
-    _incompatibleClass(Classes::NoClass),
-    _ability(){}
+Shmatte::Shmatte(QJsonObject json) :
+    Card(json),
+    _bonus(json["bonus"].toInt()),
+    _gender((Gender)json["gender"].toInt()),
+    _limb((Body)json["limb"].toInt()),
+    _race((Races)json["race"].toInt()),
+    _class((Classes)json["class"].toInt()),
+    _big(json["big"].toBool()),
+    _incompatibleClass((Classes)json["incompatibleClass"].toInt()),
+    _ability(json["ability"].toObject())
+
+{
+    if (!json.contains("bonus") ||
+        !json.contains("gender") ||
+        !json.contains("limb") ||
+        !json.contains("race") ||
+        !json.contains("class") ||
+        !json.contains("big") ||
+        !json.contains("incompatibleClass") ||
+        !json.contains("ability"))
+        emit error(8);
+}
+
 
 quint8 Shmatte::bonus() const
 {
@@ -57,10 +70,7 @@ Classes Shmatte::getClass() const
 
 QByteArray Shmatte::toByteArray()
 {
-    QByteArray result;
-    result.append(_id);
-    result.append(_description);
-    result.append(_type);
+    QByteArray result = Card::toByteArray();
     result.append(_bonus);
     result.append(_gender);
     result.append(_race);
@@ -68,7 +78,8 @@ QByteArray Shmatte::toByteArray()
     result.append(_big);
     result.append(_incompatibleClass);
     result.append(_limb);
-    result.append(QJsonDocument(_ability).toBinaryData());
+    if (!_ability.empty())
+        result.append(QJsonDocument(_ability).toBinaryData());
     return result;
 }
 
@@ -137,34 +148,6 @@ bool Shmatte::canAddtoTable(Player *player, QList<Card*>& errCards)
     }
     return true;
 }
-
-bool Shmatte::fromJson(QJsonObject json)
-{
-    if (!json.contains("bonus") ||
-        !json.contains("gender") ||
-        !json.contains("limb") ||
-        !json.contains("race") ||
-        !json.contains("class") ||
-        !json.contains("big") ||
-        !json.contains("incompatibleClass") ||
-        !json.contains("ability"))
-    {
-        emit error(8);
-        return false;
-    }
-    if (!Card::fromJson(json))
-        return false;
-    _bonus = json["bonus"].toInt();
-    _gender = (Gender)json["gender"].toInt();
-    _limb = (Body)json["limb"].toInt();
-    _race = (Races)json["race"].toInt();
-    _class = (Classes)json["class"].toInt();
-    _big = (Races)json["big"].toBool();
-    _incompatibleClass = (Classes)json["incompatibleClass"].toInt();
-    _ability = json["ability"].toObject();
-    return true;
-}
-
 QJsonObject Shmatte::toJson()
 {
     QJsonObject result = Card::toJson();
@@ -181,6 +164,15 @@ QJsonObject Shmatte::toJson()
 
 bool operator ==(const Shmatte &l, const Shmatte &r)
 {
-
+    if (!( (Card&)l == (Card&)r)) return false;
+    if (l._bonus != r._bonus) return false;
+    if (l._gender != r._gender) return false;
+    if (l._limb != r._limb) return false;
+    if (l._race != r._race) return false;
+    if (l._class != r._class) return false;
+    if (l._big != r._big) return false;
+    if (l._incompatibleClass != r._incompatibleClass) return false;
+    if (l._ability != r._ability) return false;
+    return true;
 }
 

@@ -20,7 +20,7 @@ class MUNCHKINLIBSHARED_EXPORT Class : public Card
 {
 public:
     Class(uint id, QString name, QString description, Classes __class, QJsonObject ability1, QJsonObject ability2);
-    Class();
+    Class(QJsonObject json);
     Classes getClass() const;
     QJsonObject ability1() const;
     void doAbility1();
@@ -28,14 +28,13 @@ public:
     void doAbility2();
     virtual QByteArray toByteArray();
     virtual bool canAddtoTable(Player *player, QList<Card*>& errCards);
-    virtual bool fromJson(QJsonObject json);
     virtual QJsonObject toJson();
     friend bool operator ==(const Class &l, const Class &r);
 
 private:
-    Classes _class;
-    QJsonObject _ability1;
-    QJsonObject _ability2;
+    const Classes _class;
+    const QJsonObject _ability1;
+    const QJsonObject _ability2;
 };
 
 #endif // CLASS_H
