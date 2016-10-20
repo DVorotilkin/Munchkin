@@ -3,12 +3,22 @@
 Monster::Monster(uint id, QString name, QString description, quint8 lvl, quint8 damage, QJsonObject ability, QJsonObject badStash):
     Card(id, name, description, false), _damage(damage), _lvl(lvl), _ability(ability), _badStash(badStash){}
 
-Monster::Monster() :
-    Card(0, "", "", false),
-    _damage(0),
-    _lvl(0),
-    _ability(),
-    _badStash(){}
+Monster::Monster(QJsonObject json) :
+    Card(json)
+{
+    if (!json.contains("lvl") ||
+        !json.contains("damage") ||
+        !json.contains("ability") ||
+        !json.contains("badStash"))
+    {
+        emit error(8);
+        return;
+    }
+    _lvl = json["lvl"].toInt();
+    _damage = json["damage"].toInt();
+    _ability = json["ability"].toObject();
+    _badStash = json["badStash"].toObject();
+}
 
 quint8 Monster::lvl() const
 {
@@ -37,14 +47,13 @@ QJsonObject Monster::badStash() const
 
 QByteArray Monster::toByteArray()
 {
-    QByteArray result;
-    result.append(_id);
-    result.append(_description);
-    result.append(_type);
+    QByteArray result = Card::toByteArray();
     result.append(_lvl);
     result.append(_damage);
-    result.append(QJsonDocument(_ability).toBinaryData());
-    result.append(QJsonDocument(_badStash).toBinaryData());
+    if (!_ability.isEmpty())
+        result.append(QJsonDocument(_ability).toBinaryData());
+    if (!_badStash.isEmpty())
+        result.append(QJsonDocument(_badStash).toBinaryData());
     return result;
 }
 
@@ -56,30 +65,11 @@ bool Monster::canAddtoTable(Player *player, QList<Card *> &errCards)
     return false;
 }
 
-bool Monster::fromJson(QJsonObject json)
-{
-    if (!json.contains("lvl") ||
-        !json.contains("damage") ||
-        !json.contains("ability") ||
-        !json.contains("badStash"))
-    {
-        emit error(8);
-        return false;
-    }
-    if (!Card::fromJson(json))
-        return false;
-    _lvl = json["lvl"].toInt();
-    _damage = json["damage"].toInt();
-    _ability = json["ability"].toObject();
-    _badStash = json["badStash"].toObject();
-    return true;
-}
-
 QJsonObject Monster::toJson()
 {
     QJsonObject result = Card::toJson();
-    result["lvl"] = QString::number(_lvl);
-    result["damage"] = QString::number(_damage);
+    result["lvl"] = QJsonValue((int)_lvl);
+    result["damage"] = QJsonValue((int)_damage);
     result["ability"] = _ability;
     result["badStash"] = _badStash;
     return result;

@@ -27,7 +27,7 @@ class MUNCHKINLIBSHARED_EXPORT Shmatte : public Card
 {
 public:
     Shmatte(uint id, QString name, QString description, quint8 bonus, Gender gender, Body limb, Races race, Classes __class, bool big, Classes incompatibleClass, QJsonObject ability);
-    Shmatte();
+    Shmatte(QJsonObject json);
     quint8 bonus() const;
     Races race() const;
     Classes getClass() const;
@@ -38,9 +38,8 @@ public:
     Classes incompatibleClass() const;
     virtual QByteArray toByteArray();
     virtual bool canAddtoTable(Player *player, QList<Card*>& errCards);
-    virtual bool fromJson(QJsonObject json);
     virtual QJsonObject toJson();
-    friend bool operator ==(const Class &l, const Class &r);
+    friend bool operator ==(const Shmatte &l, const Shmatte &r);
 
 private:
     quint8 _bonus;

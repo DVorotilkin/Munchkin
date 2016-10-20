@@ -10,8 +10,7 @@ TEST(CardTest, ClassTest)
     b["test"] = "test";
     Class c1(1, "Test", "TestClassCard", Classes::Thief, a, b);
     QJsonObject json = c1.toJson();
-    Class c2;
-    c2.fromJson(json);
+    Class c2(json);
     EXPECT_EQ(c1.id(), c2.id());
     EXPECT_EQ(c1.name(), c2.name());
     EXPECT_EQ(c1.description(), c2.description());
@@ -29,8 +28,7 @@ TEST(CardTest, RaceTest)
     b["test"] = "test";
     Race c1(1, "Test", "TestRaceCard", Races::Elf, b);
     QJsonObject json = c1.toJson();
-    Race c2;
-    ASSERT_TRUE(c2.fromJson(json));
+    Race c2(json);
     EXPECT_EQ(c1.id(), c2.id());
     EXPECT_EQ(c1.name(), c2.name());
     EXPECT_EQ(c1.description(), c2.description());

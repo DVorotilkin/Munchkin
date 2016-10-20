@@ -3,9 +3,16 @@
 OnceAction::OnceAction(uint id, QString name, QString description, bool type, QJsonObject action):
     Card(id, name, description, type), _action(action){}
 
-OnceAction::OnceAction() :
-    Card(0, "", "", false),
-    _action(){}
+OnceAction::OnceAction(QJsonObject json) :
+    Card(json)
+{
+    if (!json.contains("action"))
+    {
+        emit error(8);
+        return;
+    }
+    _action = json["action"].toObject();
+}
 
 QJsonObject OnceAction::action() const
 {
@@ -19,11 +26,9 @@ void OnceAction::doAction()
 
 QByteArray OnceAction::toByteArray()
 {
-    QByteArray result;
-    result.append(_id);
-    result.append(_description);
-    result.append(_type);
-    result.append(QJsonDocument(_action).toBinaryData());
+    QByteArray result = Card::toByteArray();
+    if (!_action.isEmpty())
+        result.append(QJsonDocument(_action).toBinaryData());
     return result;
 }
 
@@ -35,19 +40,6 @@ bool OnceAction::canAddtoTable(Player *player, QList<Card *> &errCards)
     return false;
 }
 
-bool OnceAction::fromJson(QJsonObject json)
-{
-    if (!json.contains("action"))
-    {
-        emit error(8);
-        return false;
-    }
-    if (!Card::fromJson(json))
-        return false;
-    _action = json["action"].toObject();
-    return true;
-}
-
 QJsonObject OnceAction::toJson()
 {
     QJsonObject result = Card::toJson();
@@ -57,5 +49,7 @@ QJsonObject OnceAction::toJson()
 
 bool operator ==(const OnceAction &l, const OnceAction &r)
 {
-
+    if (!( (Card&)l == (Card&)r)) return false;
+    if (l._action != r._action) return false;
+    return true;
 }

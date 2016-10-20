@@ -9,7 +9,7 @@ class MUNCHKINLIBSHARED_EXPORT Monster : public Card
 {
 public:
     Monster(uint id, QString name, QString description, quint8 damage, quint8 lvl, QJsonObject ability, QJsonObject badStash);
-    Monster();
+    Monster(QJsonObject json);
     quint8 _damage;
     quint8 lvl() const;
     void doAbility();
@@ -20,7 +20,6 @@ public:
 
     virtual QByteArray toByteArray();
     virtual bool canAddtoTable(Player *player, QList<Card*>& errCards);
-    virtual bool fromJson(QJsonObject json);
     virtual QJsonObject toJson();
     friend bool operator ==(const Monster &l, const Monster &r);
 
